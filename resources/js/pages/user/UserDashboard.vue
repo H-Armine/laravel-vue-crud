@@ -20,19 +20,20 @@
                                 <thead>
                                 <tr class="bg-gray-100">
                                     <th class="px-4 py-2">Name</th>
-                                    <th class="px-4 py-2 w-25 ">Description</th>
-                                    <th class="px-4 py-2 w-15">Status</th>
-                                    <th class="px-4 py-2 w-15">Created Date</th>
-                                    <th class="px-4 py-2 w-25">Action</th>
+                                    <th class="px-4 py-2">Description</th>
+                                    <th class="px-4 py-2">Status</th>
+                                    <th class="px-4 py-2">Created Date</th>
+                                    <th class="px-4 py-2">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="category in categories.data">
                                     <td class="border px-4 py-2">{{ category.name }}</td>
-                                    <td class="border px-4 py-2">{{ category.description }}</td>
+                                    <textarea class="form-control" rows="2" disabled>{{ category.description }}</textarea>
+<!--                                    <td class="border px-4 py-2">{{ category.description }}</td>-->
                                     <td class="border px-4 py-2">
                                      <span
-                                         :class="category.status === 'processing' ? 'bg-blue-500' : category.status === 'reject' ? 'bg-red-500' : 'bg-green-600'"
+                                         :class="category.status === 'Processing' ? 'bg-blue-500' : category.status === 'Inactive' ? 'bg-red-500' : 'bg-green-600'"
                                          class="text-white rounded-full w-[80px] d-block text-center"
                                      >
                              {{ category.status }}
@@ -55,7 +56,6 @@
                                 </tbody>
                             </table>
                             <div v-if="categories.links.length > 3">
-<!--                                v-if="categories.links.length > 3 || categories.data.length > 4"-->
                                 <div class="mt-10 flex justify-center mt-8">
                                     <template v-for="(link, key) in categories.links" :key="key">
                                         <div
@@ -134,7 +134,7 @@
                                     <td class="border px-4 py-2">{{ product.price }}</td>
                                     <td class="border px-4 py-2">
                                      <span
-                                         :class="product.status === 'processing' ? 'bg-blue-500' : product.status === 'reject' ? 'bg-red-500' : 'bg-green-600'"
+                                         :class="product.status === 'Processing' ? 'bg-blue-500' : product.status === 'Inactive' ? 'bg-red-500' : 'bg-green-600'"
                                          class="text-white rounded-full w-[80px] d-block text-center"
                                      >
                             {{ product.status }}
@@ -330,7 +330,9 @@ export default {
         },
 
         /**
-         * Delete Category and Product
+         * Delete Category
+         *
+         * @param category
          */
         deleteCategory(category) {
             this.categories.data.forEach((item, index) => {
@@ -361,6 +363,11 @@ export default {
             this.selectedCategoryId = id;
         },
 
+        /**
+         * Delete Product
+         *
+         * @param product
+         */
         deleteProduct(product) {
             this.products.data.forEach((item, index) => {
                 if (item.id === this.selectedProductId) {

@@ -49,11 +49,6 @@ export default {
 
     props:['id', 'current_page'],
 
-    data() {
-        return {
-            openDeleteProductModal: false,
-        }
-    },
 
     methods: {
         deleteProduct() {

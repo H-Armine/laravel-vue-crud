@@ -26,7 +26,7 @@ class ProductRequest extends FormRequest
         $path = explode('/', request()->path());
         return [
             'id' => end($path) === 'edit' ? 'required' : '',
-            'name' => 'required|string|min:3|max:35',
+            'name' => 'required|string|min:3|max:200',
             'category_id' => 'required|integer',
             'price' => 'required|regex:/^[0-9](\.[0-9][0-9][0-9])$/',
         ];

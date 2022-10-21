@@ -86,7 +86,10 @@ export default {
 
     data() {
         return {
-            openEditCategoryModal: false,
+            category: {
+                'name': '',
+                'description': ''
+            },
         }
     },
 
@@ -95,22 +98,17 @@ export default {
         'changesCategory'
     ],
 
-    category: {
-        'name': '',
-        'description': ''
-    },
-
     computed: {
         schema() {
             return yup.object().shape({
                 name: yup.string()
                     .required("Тhe name is required. Please fill in.")
                     .min(3, "The name must be at least 3 characters.")
-                    .max(35, "The name must be no more than 35 characters."),
+                    .max(200, "The name must be no more than 200 characters."),
                 description: yup.string()
                     .required("Тhe description is required. Please fill in.")
                     .min(3, "The description must be at least 3 characters.")
-                    .max(500, "The description must be no more than 500 characters.")
+                    .max(700, "The description must be no more than 700 characters.")
             });
         }
     },

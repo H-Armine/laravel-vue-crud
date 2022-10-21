@@ -18,7 +18,7 @@ return new class extends Migration
         });
 
         Schema::table('categories', function (Blueprint $table) {
-            $table->enum('status', ['processing', 'approve', 'reject']);
+            $table->enum('status', ['Processing', 'Active', 'Inactive']);
         });
     }
 

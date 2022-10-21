@@ -100,7 +100,15 @@ export default {
 
     data() {
         return {
+            product: {
+                'name': '',
+                'category_id': '',
+                'price': ''
+            },
 
+            category: {
+                'name': '',
+            },
         }
     },
 
@@ -110,15 +118,6 @@ export default {
         'changesProduct',
     ],
 
-    // product: {
-    //     'name': '',
-    //     'category_id': '',
-    //     'price': ''
-    // },
-    //
-    // category: {
-    //     'name': '',
-    // },
 
     computed: {
         schema() {
@@ -126,7 +125,7 @@ export default {
                 name: yup.string()
                     .required("Тhe name is required. Please fill in.")
                     .min(3, "The name must be at least 3 characters.")
-                    .max(35, "The name must be no more than 35 characters."),
+                    .max(200, "The name must be no more than 200 characters."),
                 category: yup.string()
                     .required("Тhe category is required. Please choose one of the category."),
                 price: yup.string()

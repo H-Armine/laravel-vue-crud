@@ -26,8 +26,8 @@ class CategoryRequest extends FormRequest
         $path = explode('/', request()->path());
         return [
             'id' => end($path) === 'edit' ? 'required' : '',
-            'name' => 'required|string|min:3|max:35',
-            'description' => 'required|string|min:3|max:500',
+            'name' => 'required|string|min:3|max:200',
+            'description' => 'required|string|min:3|max:700',
         ];
     }
 

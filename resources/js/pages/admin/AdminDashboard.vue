@@ -26,7 +26,7 @@
                             <td class="border px-4 py-2">{{ product.price }}</td>
                             <td class="border px-4 py-2">
                             <span
-                                :class="product.status === 'processing' ? 'bg-blue-500' : product.status === 'reject' ? 'bg-red-500' : 'bg-green-600'"
+                                :class="product.status === 'Processing' ? 'bg-blue-500' : product.status === 'Inactive' ? 'bg-red-500' : 'bg-green-600'"
                                 class="text-white rounded-full w-[80px] d-block text-center"
                             >
                             {{ product.status }}
@@ -35,18 +35,18 @@
                             <td class="border px-4 py-2">{{ product.created_at }}</td>
                             <td class="px-2 py-2 space-x-4 md:border md:border-grey-500 text-left block md:table-cell">
                                 <button
-                                    :disabled="product.status === 'approve'"
-                                    :class="product.status === 'approve' ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-600 active:shadow-lg transition duration-150 ease-in-out'"
+                                    :disabled="product.status === 'Active'"
+                                    :class="product.status === 'Active' ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-600 active:shadow-lg transition duration-150 ease-in-out'"
                                     class="px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md"
-                                    @click="changeProductStatus(product, 'approve')"
+                                    @click="changeProductStatus(product, 'Active')"
                                 >
                                     Approve
                                 </button>
                                 <button
-                                    :disabled="product.status === 'reject'"
-                                    :class="product.status === 'reject' ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out'"
+                                    :disabled="product.status === 'Inactive'"
+                                    :class="product.status === 'Inactive' ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out'"
                                     class="px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md "
-                                    @click="changeProductStatus(product, 'reject')"
+                                    @click="changeProductStatus(product, 'Inactive')"
                                 >
                                     Reject
                                 </button>

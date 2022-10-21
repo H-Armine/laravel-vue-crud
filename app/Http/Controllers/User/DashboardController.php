@@ -72,7 +72,6 @@ class DashboardController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
         ]);
-
         return response()->json([
             'status' => 'success',
             'category' => Category::find($category->id)
@@ -136,7 +135,6 @@ class DashboardController extends Controller
             'category_id' => $request->input('category_id'),
             'price' => $request->input('price'),
         ]);
-
         $product = Product::where('id', $product->id)
             ->with('category')
             ->first();
