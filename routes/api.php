@@ -15,14 +15,3 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::get('categories', [\App\Http\Controllers\CategoryController::class,'index']);
-Route::group(['prefix' => 'categorie'], function () {
-    Route::post('add', [\App\Http\Controllers\CategoryController::class, 'add']);
-    Route::get('edit/{id}', [\App\Http\Controllers\CategoryController::class, 'edit']);
-    Route::post('update/{id}', [\App\Http\Controllers\CategoryController::class,'update']);
-    Route::delete('delete/{id}', [\App\Http\Controllers\CategoryController::class,'delete']);
-});

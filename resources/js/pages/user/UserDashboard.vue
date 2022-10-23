@@ -11,7 +11,7 @@
                             </h1>
                             <button type="button"
                                     class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                                    @click="openAddCategoryModal = !openAddCategoryModal">
+                                    @click="openAddCategoryModal = true">
                                 Add Category
                             </button>
                         </div>
@@ -29,8 +29,8 @@
                                 <tbody>
                                 <tr v-for="category in categories.data">
                                     <td class="border px-4 py-2">{{ category.name }}</td>
-                                    <textarea class="form-control" rows="2" disabled>{{ category.description }}</textarea>
-<!--                                    <td class="border px-4 py-2">{{ category.description }}</td>-->
+<!--                                    <textarea class="form-control" rows="2" disabled>{{ category.description }}</textarea>-->
+                                    <td class="border px-4 py-2">{{ category.description }}</td>
                                     <td class="border px-4 py-2">
                                      <span
                                          :class="category.status === 'Processing' ? 'bg-blue-500' : category.status === 'Inactive' ? 'bg-red-500' : 'bg-green-600'"
@@ -43,7 +43,7 @@
                                     <td class="px-4 py-2 md:border md:border-grey-500 text-left block md:table-cell">
                                         <button data-bs-target="#editCategory"
                                                 class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                                                type="submit" @click=editCategory(category)>
+                                                type="submit" @click=editCategoryModal(category)>
                                             Edit
                                         </button>
                                         <button type="button" class="mx-2 btn btn-danger px-4 py-2"
@@ -84,10 +84,10 @@
                         </AddCategory>
                         <EditCategory
                             v-if="openEditCategoryModal"
-                            @close="openEditCategoryModal = false"
-                            @updateEditCategory="updateEditCategory"
                             :selectedCategory="selectedCategory"
-                            :changesCategory="changesCategory">
+                            :changesCategory="changesCategory"
+                            @close="openEditCategoryModal = false"
+                            @updateEditCategory="updateEditCategory">
                         </EditCategory>
                         <DeleteCategory
                             v-if="openDeleteCategoryModal"
@@ -111,7 +111,7 @@
                             </h1>
                             <button type="button"
                                     class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                                    @click="openAddProductModal = !openAddProductModal">
+                                    @click="openAddProductModal = true">
                                 Add Product
                             </button>
                         </div>
@@ -144,7 +144,7 @@
                                     <td class="px-4 py-2 md:border md:border-grey-500 text-left block md:table-cell">
                                         <button data-bs-target="#editProduct"
                                                 class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                                                type="submit" @click=editProduct(product)>
+                                                type="submit" @click=editProductModal(product)>
                                             Edit
                                         </button>
                                         <button type="button" class="mx-2 btn btn-danger px-4 py-2"
@@ -207,12 +207,12 @@
 </template>
 
 <script>
-import AddCategory from './AddCategory.vue';
-import AddProduct from './AddProduct.vue';
-import EditCategory from './EditCategory.vue';
-import EditProduct from './EditProduct.vue';
-import DeleteCategory from './DeleteCategory.vue';
-import DeleteProduct from './DeleteProduct.vue';
+import AddCategory from '../../components/user/AddCategory.vue';
+import AddProduct from '../../components/user/AddProduct.vue';
+import EditCategory from '../../components/user/EditCategory.vue';
+import EditProduct from '../../components/user/EditProduct.vue';
+import DeleteCategory from '../../components/user/DeleteCategory.vue';
+import DeleteProduct from '../../components/user/DeleteProduct.vue';
 
 export default {
     name: "UserDashboard.vue",
@@ -258,11 +258,14 @@ export default {
             if (this.categories.current_page === 1) {
                 this.categories.data.unshift(item);
             }
+
             if (this.categories.data.length > 5) {
                 this.categories.data.pop();
             }
+
             this.categories.total++;
             const perPage = Math.ceil(this.categories.total / 5);
+
             if (perPage > (this.categories.links.length - 2)) {
                 const categoriesLink = {
                     url: window.location.origin + '/get-categories?page=' + perPage,
@@ -279,11 +282,14 @@ export default {
             if (this.products.current_page === 1) {
                 this.products.data.unshift(item);
             }
+
             if (this.products.data.length > 5) {
                 this.products.data.pop();
             }
+
             this.products.total++;
             const perPage = Math.ceil(this.products.total / 5);
+
             if (perPage > (this.products.links.length - 2)) {
                 const productsLink = {
                     url: window.location.origin + '/get-products?page=' + perPage,
@@ -296,25 +302,33 @@ export default {
         },
 
         /**
-         * Edit Category and Product
+         * Edit Category
          *
          * @param category
          */
-        editCategory(category) {
-            this.openEditCategoryModal = !this.openEditCategoryModal;
+
+        editCategoryModal(category) {
+            this.openEditCategoryModal = true;
             this.selectedCategory.id = category.id;
             this.selectedCategory.name = category.name;
             this.selectedCategory.description = category.description;
             this.changesCategory = category;
         },
 
-        updateEditCategory(item) {
-            this.selectedCategoryId = item;
+        updateEditCategory(category) {
+            this.changesCategory.name = category.name;
+            this.changesCategory.description = category.description;
             this.openEditCategoryModal = false;
+            this.getProducts();
         },
 
-        editProduct(product) {
-            this.openEditProductModal = !this.openEditProductModal;
+        /**
+         * Edit Product
+         *
+         * @param product
+         */
+        editProductModal(product) {
+            this.openEditProductModal = true;
             this.selectedProduct.id = product.id;
             this.selectedProduct.name = product.name;
             this.selectedProduct.category_id = product.category_id;
@@ -340,22 +354,27 @@ export default {
                     this.categories.data.splice(index, 1);
                 }
             });
+
             if (this.categories.data.length === 4) {
                 if (category)
-                this.categories.data.push(category);
+                    this.categories.data.push(category);
             }
+
             this.categories.total--;
+
             const perPage = Math.ceil(this.categories.total / 5);
             if (perPage < (this.categories.links.length - 2)) {
                 this.categories.links.splice(this.categories.links.length - 2, 1);
             }
-            if (this.categories.current_page) {
-                if (this.categories.data.length === 0){
-                    const pages = this.categories.current_page - 1;
-                    this.getCategories('/get-categories?page=' + pages);
-                }
+
+            if (this.categories.data.length === 0){
+                const pages = this.categories.current_page - 1;
+                this.getCategories('/get-categories?page=' + pages);
             }
+
             this.openDeleteCategoryModal = false;
+            this.getCategoryList();
+            this.getProducts(category);
         },
 
         deleteCategoryModal(id) {
@@ -374,20 +393,22 @@ export default {
                     this.products.data.splice(index, 1);
                 }
             });
+
             if (this.products.data.length === 4) {
                 if (product)
                     this.products.data.push(product);
             }
+
             this.products.total--;
             const perPage = Math.ceil(this.products.total / 5);
+
             if (perPage < (this.products.links.length - 2)) {
                 this.products.links.splice(this.products.links.length - 2, 1);
             }
-            if (this.products.current_page) {
-                if (this.products.data.length === 0){
-                    const pages = this.products.current_page - 1;
-                    this.getProducts('/get-products?page=' + pages);
-                }
+
+            if (this.products.data.length === 0){
+                const pages = this.products.current_page - 1;
+                this.getProducts('/get-products?page=' + pages);
             }
             this.openDeleteProductModal = false;
         },
@@ -429,7 +450,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

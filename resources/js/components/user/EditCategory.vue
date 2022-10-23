@@ -5,7 +5,7 @@
         <div class="absolute bg-black opacity-80 inset-0 z-0"/>
         <div class="modal-dialog relative w-25 pointer-events-none">
             <div
-                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                class="w-full max-w-lg p-0.5 relative mx-auto my-auto rounded-xl shadow-lg bg-white flex flex-col pointer-events-auto bg-clip-padding text-current">
                 <div
                     class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
                     <h5 class="text-xl font-medium leading-normal text-gray-800"
@@ -59,9 +59,8 @@
                             Close
                         </button>
                         <button type="submit"
-                                data-bs-dismiss="modal"
                                 class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
-                            Update
+                            Save
                         </button>
                     </div>
                 </Form>
@@ -76,27 +75,23 @@ import * as yup from "yup";
 
 export default {
     name: "EditCategory.vue",
-
     emits: ["close", "updateEditCategory"],
-
     components: {
         Form,
         Field,
     },
-
+    props: [
+        'selectedCategory',
+        'changesCategory'
+    ],
     data() {
         return {
             category: {
                 'name': '',
                 'description': ''
-            },
+            }
         }
     },
-
-    props: [
-        'selectedCategory',
-        'changesCategory'
-    ],
 
     computed: {
         schema() {
@@ -117,11 +112,8 @@ export default {
         updateCategory() {
             axios.post('dashboard/category/edit', this.selectedCategory)
                 .then(response => {
-                    this.$emit('updateEditCategory', response.data.category)
-                    if (response.data.post) {
-                        // this.changesCategory.id =  this.selectedCategory.id;
-                        this.changesCategory.name = this.selectedCategory.name;
-                        this.changesCategory.description = this.selectedCategory.description;
+                    if (response.data.category) {
+                        this.$emit('updateEditCategory', response.data.category)
                     }
                 })
                 .catch(error => console.log(error))
@@ -130,7 +122,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

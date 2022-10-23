@@ -5,7 +5,7 @@
         <div class="absolute bg-black opacity-80 inset-0 z-0"/>
         <div class="modal-dialog relative w-25 pointer-events-none">
             <div
-                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                class="w-full max-w-lg p-0.5 relative mx-auto my-auto rounded-xl shadow-lg bg-white flex flex-col pointer-events-auto bg-clip-padding text-current">
                 <div
                     class="modal-header rounded-xl flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
                     <h5 class="text-xl font-medium leading-normal text-gray-800"
@@ -77,18 +77,14 @@ import * as yup from "yup";
 
 export default {
     name: "AddCategory.vue",
-
     emits: ["close", "deleteCategory"],
-
     components: {
         Form,
         Field,
     },
-
     props: [
         'message'
     ],
-
     data() {
         return {
             category: {
@@ -116,7 +112,7 @@ export default {
 
     methods: {
         saveCategory() {
-            axios.post('/user/dashboard/category/add', this.category)
+            axios.post('dashboard/category/add', this.category)
                 .then(response => {
                     this.$emit('addCategory', response.data.category);
                 })
@@ -126,7 +122,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

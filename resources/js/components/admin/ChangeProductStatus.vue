@@ -46,13 +46,11 @@
 
 <script>
 export default {
-    name: "ChangeProductStatus.vue",
-
+    name: "ChangeProductStatus",
     props: [
         'status',
         'changesProductId'
     ],
-
     data() {
         return {
             allProducts: [],
@@ -62,16 +60,14 @@ export default {
 
     methods: {
         changeProductStatus(status) {
-            axios.post('dashboard/change/status/product', {id: this.changesProductId, status: this.status})
-                .then((res) => {
+            axios.post('/dashboard/change-product-status', {id: this.changesProductId, status: this.status})
+                .then(response => {
                     this.$emit('changedStatusProduct');
                 })
                 .catch(error => console.log(error))
                 .finally(() => this.loading = false)
         }
     },
-    created() {
-    }
 }
 </script>
 

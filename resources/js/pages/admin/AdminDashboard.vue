@@ -86,19 +86,16 @@
 </template>
 
 <script>
-import ChangeProductStatus from "./ChangeProductStatus.vue";
+import ChangeProductStatus from "../../components/admin/ChangeProductStatus.vue";
 
 export default {
-    name: "AdminDashboard.vue",
-
+    name: "AdminDashboard",
     components: {
         ChangeProductStatus,
     },
-
     props: [
         'products',
     ],
-
     data() {
         return {
             openStatusProductModal: false,

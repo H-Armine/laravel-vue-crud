@@ -14,5 +14,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-/resources/js/pages/user/request.vue
-/resources/js/pages/admin/new.vue
+/resources/js/components/user/request.vue
+/resources/js/components/admin/new.vue

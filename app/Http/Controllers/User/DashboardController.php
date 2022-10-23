@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
-use App\Http\Requests\ProductRequest;
-use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
+use App\Http\Requests\CategoryRequest;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
 
 class DashboardController extends Controller
 {
@@ -59,18 +59,21 @@ class DashboardController extends Controller
     }
 
     /**
-     * add category
+     * Add category
      *
      * @param CategoryRequest $request
      * @return JsonResponse
      *
      */
-    public function addCategory(CategoryRequest $request)
+    public function addCategory(CategoryRequest $request): JsonResponse
     {
+        $name = $request->input('name');
+        $description = $request->input('description');
+
         $category = Category::create([
             'user_id' => auth()->id(),
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
+            'name' => $name,
+            'description' => $description
         ]);
         return response()->json([
             'status' => 'success',
@@ -79,64 +82,74 @@ class DashboardController extends Controller
     }
 
     /**
-     * edit category
+     * Edit category
      *
      * @param CategoryRequest $request
-     * @param $id
      * @return JsonResponse
      */
-    public function editCategory(CategoryRequest $request)
+    public function editCategory(CategoryRequest $request): JsonResponse
     {
         $id = $request->input('id');
-        $category = Category::where('id', $id)
-            ->update(
-                [
+        $name = $request->input('name');
+        $description = $request->input('description');
+
+       Category::where('id', $id)->update([
                     'user_id' => auth()->id(),
-                    'name' => $request->input('name'),
-                    'description' => $request->input('description')
+                    'name' => $name,
+                    'description' => $description
                 ]);
+        $category = Category::where('id', $id)
+            ->take(1)
+            ->first();
         return response()->json([
             'status' => 'success',
-            'post' => $category
+            'category' => $category
         ]);
     }
 
     /**
-     * delete category
+     * Delete category
      *
-     * @param $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function deleteCategory(Request $request)
+    public function deleteCategory(Request $request): JsonResponse
     {
         $id = $request->input('id');
         $currentPage = $request->input('current_page');
         Category::find($id)->delete();
         Product::where('category_id', $id)->delete();
+
         $categoryRow = Category::orderBy('id', 'DESC')
             ->skip($currentPage * 5 - 1)
-            ->take(1)->first();
+            ->take(1)
+            ->first();
         return response()->json([
             'message' => 'The category successfully deleted.',
             'category' => $categoryRow]);
     }
 
     /**
-     * add product
+     * Add product
      *
      * @param ProductRequest $request
      * @return JsonResponse
      */
-    public function addProduct(ProductRequest $request)
+    public function addProduct(ProductRequest $request): JsonResponse
     {
+        $name = $request->input('name');
+        $category_id = $request->input('category_id');
+        $price = $request->input('price');
+
         $product = Product::create([
             'user_id' => auth()->id(),
-            'name' => $request->input('name'),
-            'category_id' => $request->input('category_id'),
-            'price' => $request->input('price'),
+            'name' => $name,
+            'category_id' => $category_id,
+            'price' => $price,
         ]);
         $product = Product::where('id', $product->id)
             ->with('category')
+            ->take(1)
             ->first();
         return response()->json([
             'status' => 'success',
@@ -145,25 +158,27 @@ class DashboardController extends Controller
     }
 
     /**
-     * edit product
+     * Edit product
      *
      * @param ProductRequest $request
-     * @param $id
      * @return JsonResponse
      */
-    public function editProduct(ProductRequest $request)
+    public function editProduct(ProductRequest $request): JsonResponse
     {
         $id = $request->input('id');
-        $product = Product::where('id', $id)
-            ->update(
-                [
+        $name = $request->input('name');
+        $category_id = $request->input('category_id');
+        $price = $request->input('price');
+
+        Product::where('id', $id)->update([
                     'user_id' => auth()->id(),
-                    'name' => $request->input('name'),
-                    'category_id' => $request->input('category_id'),
-                    'price' => $request->input('price'),
+                    'name' => $name,
+                    'category_id' => $category_id,
+                    'price' => $price,
                 ]);
         $product = Product::where('id', $id)
             ->with('category')
+            ->take(1)
             ->first();
         return response()->json([
             'status' => 'success',
@@ -171,16 +186,16 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * delete product
+    /** Delete product
      *
-     * @param $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function deleteProduct(Request $request)
+    public function deleteProduct(Request $request): JsonResponse
     {
         $id = $request->input('id');
         $currentPage = $request->input('current_page');
+
         Product::find($id)->delete();
         $productRow = Product::orderBy('id', 'DESC')
             ->with('category')

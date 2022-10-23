@@ -11,7 +11,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->orderBy('id', 'DESC')->paginate(5);
+        $products = Product::with('category')
+            ->orderBy('id', 'DESC')
+            ->paginate(5);
         return view('admin.admin-dashboard')->with(compact('products'));
     }
 
@@ -27,6 +29,6 @@ class DashboardController extends Controller
         $status = $request->input('status');
 
         Product::where('id', $id)->update(['status' => $status]);
-        return response()->json('The Product successfully changed.');
+        return response()->json('The Product status successfully changed.');
     }
 }
